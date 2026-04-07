@@ -1,0 +1,406 @@
+{
+  "info": {
+    "_postman_id": "88d740e4-b1dc-43dc-89dc-b9725db4ee9c",
+    "name": "Projeto S07",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53619107",
+    "_collection_link": "https://go.postman.co/collection/53619107-88d740e4-b1dc-43dc-89dc-b9725db4ee9c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "alignments",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const resposta = pm.response.json();",
+              "",
+              "pm.test('Statu deve ser 200 OK', function(){",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Json de resposta de alinhamento em results deve ter todos os campos\", function(){",
+              "    resposta.results.forEach((alinhamento) => {",
+              "        pm.expect(alinhamento).to.have.property(\"index\").that.is.a(\"string\").and.not.empty;",
+              "        pm.expect(alinhamento).to.have.property(\"name\").that.is.a(\"string\").and.not.empty;",
+              "        pm.expect(alinhamento).to.have.property(\"url\").that.is.a(\"string\").and.not.empty;",
+              "    });",
+              "});",
+              "    ",
+              "pm.test('Devem existir 9 alinhamentos, na chave \"count\"', function () {",
+              "    pm.expect(resposta.count).to.equal(9);",
+              "});",
+              "",
+              "pm.test('Devem existir 9 alinhamentos na lista results', function () {",
+              "    pm.expect(resposta.results).to.have.lengthOf(9)",
+              "});",
+              "",
+              "// teste Inválido",
+              "pm.test('Verifica se não existe combinação invalida', function(){",
+              "    const combinacoesInvalidas = [",
+              "        \"chaotic-chaotic\", \"lawful-lawful\", \"neutral-neutral\", \"good-good\", \"evil-evil\"",
+              "    ];",
+              "",
+              "    resposta.results.forEach((alinhamento) => {",
+              "        combinacoesInvalidas.forEach((combo) => {",
+              "            pm.expect(alinhamento.index).to.not.equal(combo);",
+              "        });",
+              "    });",
+              "});",
+              "",
+              "pm.test(\"Tempo de resposta a baixo do limite de tempo\", function(){",
+              "    pm.expect(pm.response.responseTime).to.be.below(1000)",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/alignments",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "alignments"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "todos_os_monstros",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const all_monsters = pm.response.json();",
+              "",
+              "pm.test(\"Status de resposta deve ser 200\", function(){",
+              "    pm.response.to.have.status(200)",
+              "});",
+              "",
+              "pm.test(\"Json possui o campo 'results' e ele não é vazio\", function(){",
+              "    pm.expect(all_monsters.results).to.be.an('array').that.is.not.empty;",
+              "});",
+              "",
+              "pm.test(\"Campo results, uma lista com 334 itens\", function(){",
+              "    pm.expect(all_monsters.results).to.have.lengthOf(334)",
+              "});",
+              "",
+              "pm.test(\"Campo 'count' deve ter o mesmo valor que a quantidade na lista 'results'\", function(){",
+              "    pm.expect(all_monsters.count).to.equal(all_monsters.results.length)",
+              "});",
+              "",
+              "pm.test(\"Todos os monstros devem ter os campos essenciais\", function() {",
+              "    ",
+              "    const listaReduzida = all_monsters.results.slice(0, 20);",
+              "    // !A LISTA ESTA REDUZIDA UNICA E EXCLUSIVAMENTE PARA O postman E A api NÃO BARRAR TANTAS REQUISIÇÕES!",
+              "    listaReduzida.forEach((monsterRef) => {",
+              "        const URLcompleta = \"https://www.dnd5eapi.co\" + monsterRef.url;",
+              "",
+              "",
+              "",
+              "        pm.sendRequest(URLcompleta, (error, response) => {",
+              "            if(error) {",
+              "                console.error(`Erro ao chamar ${monsterRef.name}: ${error}`);",
+              "                return;",
+              "            }",
+              "",
+              "            const monster = response.json()",
+              "            const mensagem_erro = `Verifica falha na integridade do monstro: ${monster.name || 'Sem Nome'}`",
+              "        ",
+              "            pm.test(`${mensagem_erro}`, function () {",
+              "                pm.expect(monster.index, mensagem_erro).to.be.a('string').and.not.empty;",
+              "                pm.expect(monster.name, mensagem_erro).to.be.a('string').and.not.empty;",
+              "                pm.expect(monster.url, mensagem_erro).to.be.a('string').and.include('/monsters/');",
+              "                ",
+              "                pm.expect(monster.size, mensagem_erro).to.be.a('string').and.not.empty;",
+              "                pm.expect(monster.type, mensagem_erro).to.be.a('string').and.not.empty;",
+              "                pm.expect(monster.alignment, mensagem_erro).to.be.a('string').and.not.empty;",
+              "",
+              "                pm.expect(monster.armor_class, mensagem_erro).to.be.an('array').and.not.empty;",
+              "                pm.expect(monster.hit_points, mensagem_erro).to.be.a('number');",
+              "                pm.expect(monster.hit_dice, mensagem_erro).to.be.a('string').and.not.empty;",
+              "                pm.expect(monster.hit_points_roll, mensagem_erro).to.be.a('string').and.not.empty;",
+              "",
+              "                pm.expect(monster.strength, mensagem_erro).to.be.a('number');",
+              "                pm.expect(monster.dexterity, mensagem_erro).to.be.a('number');",
+              "                pm.expect(monster.constitution, mensagem_erro).to.be.a('number');",
+              "                pm.expect(monster.intelligence, mensagem_erro).to.be.a('number');",
+              "                pm.expect(monster.wisdom, mensagem_erro).to.be.a('number');",
+              "                pm.expect(monster.charisma, mensagem_erro).to.be.a('number');",
+              "",
+              "                pm.expect(monster.xp, mensagem_erro).to.be.a('number');",
+              "                pm.expect(monster.challenge_rating, mensagem_erro).to.be.a('number');",
+              "                pm.expect(monster.proficiency_bonus, mensagem_erro).to.be.a('number');",
+              "                ",
+              "                pm.expect(monster.speed, mensagem_erro).to.be.an('object').and.not.empty;",
+              "                pm.expect(monster.image, mensagem_erro).to.be.a('string').and.include('/images/');",
+              "            });",
+              "        });",
+              "    });",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/monsters",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "monsters"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "monstro_nao_existe",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status deve ser 404 para Monstro que não existe', function(){",
+              "    pm.response.to.have.status(404);",
+              "});",
+              "",
+              "// teste Inválido",
+              "pm.test('Status não deve ser 200 para Monstro que não existe', function(){",
+              "    pm.response.to.not.have.status(200)",
+              "});",
+              "",
+              "pm.test(\"Tempo de resposta a baixo do limite de tempo\", function(){",
+              "    pm.expect(pm.response.responseTime).to.be.below(1000)",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/monsters/exemplo_nao_existe",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "monsters",
+            "exemplo_nao_existe"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "monstro_aboleth",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const monster = pm.response.json();",
+              "",
+              "pm.test(\"Validar integridade dos dados detalhados do Aboleth\", function () {",
+              "    pm.expect(monster.index).to.equal(\"aboleth\");",
+              "    pm.expect(monster.name).to.equal(\"Aboleth\");",
+              "    pm.expect(monster.size).to.equal(\"Large\");",
+              "    pm.expect(monster.type).to.equal(\"aberration\");",
+              "    pm.expect(monster.alignment).to.equal(\"lawful evil\");",
+              "",
+              "    pm.expect(monster.strength).to.equal(21);",
+              "    pm.expect(monster.dexterity).to.equal(9);",
+              "    pm.expect(monster.constitution).to.equal(15);",
+              "    pm.expect(monster.intelligence).to.equal(18);",
+              "    pm.expect(monster.wisdom).to.equal(15);",
+              "    pm.expect(monster.charisma).to.equal(18);",
+              "",
+              "    pm.expect(monster.hit_points).to.equal(135);",
+              "    pm.expect(monster.hit_dice).to.equal(\"18d10\");",
+              "    pm.expect(monster.hit_points_roll).to.equal(\"18d10+36\");",
+              "    pm.expect(monster.armor_class[0].value).to.equal(17);",
+              "    pm.expect(monster.armor_class[0].type).to.equal(\"natural\");",
+              "",
+              "    pm.expect(monster.speed.walk).to.equal(\"10 ft.\");",
+              "    pm.expect(monster.speed.swim).to.equal(\"40 ft.\");",
+              "",
+              "    pm.expect(monster.challenge_rating).to.equal(10);",
+              "    pm.expect(monster.xp).to.equal(5900);",
+              "    pm.expect(monster.proficiency_bonus).to.equal(4);",
+              "",
+              "    pm.expect(monster.image).to.equal(\"/api/images/monsters/aboleth.png\");",
+              "    pm.expect(monster.url).to.equal(\"/api/2014/monsters/aboleth\");",
+              "});",
+              "",
+              "pm.test(\"Validar existência de proficiências e ações\", function () {",
+              "    pm.expect(monster.proficiencies).to.be.an('array').and.not.empty;",
+              "    pm.expect(monster.actions).to.be.an('array').and.not.empty;",
+              "    pm.expect(monster.special_abilities).to.be.an('array').and.not.empty;",
+              "    pm.expect(monster.legendary_actions).to.be.an('array').and.not.empty;",
+              "});",
+              "",
+              "pm.test(\"Valida se o campo 'speed' é um objeto\", function(){",
+              "    pm.expect(monster.speed).to.be.an('object')",
+              "});",
+              "",
+              "// teste Inválido",
+              "pm.test(\"Aboleth não possui habilidade de Spellcasting\", function () {",
+              "    const temSpellcasting = monster.special_abilities.some(",
+              "        (habilidade) => habilidade.name === \"Spellcasting\"",
+              "    );",
+              "    pm.expect(temSpellcasting).to.be.false;",
+              "});",
+              "",
+              "pm.test(\"Tempo de resposta a baixo do limite de tempo\", function(){",
+              "    pm.expect(pm.response.responseTime).to.be.below(1000)",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/monsters/aboleth",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "monsters",
+            "aboleth"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "metodo_post_em_monstos",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// teste Inválido",
+              "pm.test(\"Valida se o método POST não é permitido em Monstres\", function(){",
+              "    pm.expect(pm.response.code).to.be.oneOf([404, 405]);",
+              "});",
+              "",
+              "pm.test(\"Valida se a resposta é um HTML\", function(){",
+              "    const tipoConteudo = pm.response.headers.get('Content-Type')",
+              "    pm.expect(tipoConteudo).to.include(\"text/html\")",
+              "});",
+              "",
+              "pm.test(\"Valida se há o campo mostrando que não pode haver POST na mensagem HTML\", function(){",
+              "    pm.expect(pm.response.text()).to.include(\"Cannot POST /api/2014/monsters\");",
+              "});",
+              "",
+              "pm.test(\"Garante que a API não processou dados indevidos\", function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(500);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/monsters/monstro_exemplo",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "monsters",
+            "monstro_exemplo"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "metodo_delete_em_monstos",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// teste Inválido",
+              "pm.test(\"Valida se o método DELETE não é permitido em Monstres\", function(){",
+              "    pm.expect(pm.response.code).to.be.oneOf([404, 405]);",
+              "});",
+              "",
+              "pm.test(\"Valida se a resposta é um HTML\", function(){",
+              "    const tipoConteudo = pm.response.headers.get('Content-Type')",
+              "    pm.expect(tipoConteudo).to.include(\"text/html\")",
+              "});",
+              "",
+              "pm.test(\"Valida se há o campo mostrando que não pode haver POST na mensagem HTML\", function(){",
+              "    pm.expect(pm.response.text()).to.include(\"Cannot DELETE /api/2014/monsters\");",
+              "});",
+              "",
+              "pm.test(\"Garante que a API não processou dados indevidos\", function () {",
+              "pm.expect(pm.response.responseTime).to.be.below(500);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/monsters/aboleth",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "monsters",
+            "aboleth"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
