@@ -1,0 +1,391 @@
+{
+  "info": {
+    "_postman_id": "4006e97f-4290-460e-801b-eca0916281a7",
+    "name": "My Collection",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48550714",
+    "_collection_link": "https://go.postman.co/collection/48550714-4006e97f-4290-460e-801b-eca0916281a7?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Trabalho S07",
+      "item": [
+        {
+          "name": "todas_as_classes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const returnal = pm.response.json();\r",
+                  "\r",
+                  "pm.test('Status deve ser 200', function ()\r",
+                  "{\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test('Contagem deve ser 12', function ()\r",
+                  "{\r",
+                  "    pm.expect(returnal.count).to.equal(12);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test('O indice da primeira classe deve ser \"barbarian\"', function ()\r",
+                  "{\r",
+                  "    pm.expect(returnal.results[0].index).to.equal(\"barbarian\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test('Todas as classes devem ter somente index, name e url', function()\r",
+                  "{\r",
+                  "    returnal.results.forEach(function(item)\r",
+                  "    {\r",
+                  "        const keys = Object.keys(item);\r",
+                  "        pm.expect(keys).to.have.members(['index', 'name', 'url']);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.test('O endpoint deve terminar com o mesmo valor do index', function()\r",
+                  "{\r",
+                  "    returnal.results.forEach(function(item)\r",
+                  "    {\r",
+                  "        const urlParts = item.url.split('/');\r",
+                  "        const endpointName = urlParts[urlParts.length - 1];\r",
+                  "\r",
+                  "        pm.expect(endpointName).to.equal(item.index);\r",
+                  "    });\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://www.dnd5eapi.co/api/2014/classes",
+              "protocol": "https",
+              "host": [
+                "www",
+                "dnd5eapi",
+                "co"
+              ],
+              "path": [
+                "api",
+                "2014",
+                "classes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "classe_clerigo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const returnal = pm.response.json();\r",
+                  "\r",
+                  "pm.test('Deve possuir o campo spellcasting', function ()\r",
+                  "{\r",
+                  "    pm.expect(returnal).to.have.property('spellcasting');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test('O campo spellcasting_ability.index deve ser igual ao valor wis', function()\r",
+                  "{\r",
+                  "    pm.expect(returnal.spellcasting.spellcasting_ability.index).to.equal('wis');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test('Não deve existir proficiency com index \"all-armor\"', function () \r",
+                  "{\r",
+                  "    const hasHeavyArmor = returnal.proficiencies.some(p => p.index === \"all-armor\");\r",
+                  "    pm.expect(hasHeavyArmor).to.be.false;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test('Não deve conter saving throws inválidos para a classe clerigo', function () \r",
+                  "{\r",
+                  "    const indexes = returnal.saving_throws.map(s => s.index);\r",
+                  "    const proibidos = ['str', 'dex', 'con', 'int']; // Lista de saving throws proibidos para a classe cleric\r",
+                  "    const temProibido = indexes.some(i => proibidos.includes(i));\r",
+                  "    pm.expect(temProibido).to.be.false;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://www.dnd5eapi.co/api/2014/classes/cleric",
+              "protocol": "https",
+              "host": [
+                "www",
+                "dnd5eapi",
+                "co"
+              ],
+              "path": [
+                "api",
+                "2014",
+                "classes",
+                "cleric"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "metodo_post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('POST não deve ser permitido', function () \r",
+                  "{\r",
+                  "    pm.expect([404, 405]);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "https://www.dnd5eapi.co/api/2014/artificer",
+              "protocol": "https",
+              "host": [
+                "www",
+                "dnd5eapi",
+                "co"
+              ],
+              "path": [
+                "api",
+                "2014",
+                "artificer"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "metodo_delete",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('DELETE não deve ser permitido', function () \r",
+                  "{\r",
+                  "    pm.expect([404, 405]);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://www.dnd5eapi.co/api/2014/classes/cleric",
+              "protocol": "https",
+              "host": [
+                "www",
+                "dnd5eapi",
+                "co"
+              ],
+              "path": [
+                "api",
+                "2014",
+                "classes",
+                "cleric"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "classe_amostral",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const returnal = pm.response.json();\r",
+                  "\r",
+                  "pm.test('Status deve ser 200', function ()\r",
+                  "{\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test('O campo hit_die deve estar em dentro de um intervalo válido', function ()\r",
+                  "{\r",
+                  "    pm.expect(returnal.hit_die).to.be.within(6, 12);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test('Deve conter o campo subclasses', function()\r",
+                  "{\r",
+                  "    pm.expect(returnal).to.have.property('subclasses');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test('Deve conter exatamente dois saving throws', function()\r",
+                  "{\r",
+                  "    const indexes = returnal.saving_throws.map(s => s.index);\r",
+                  "    pm.expect(indexes).to.have.lengthOf(2);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test('Deve conter o campo prificiency_choices não vazio', function()\r",
+                  "{\r",
+                  "    pm.expect(returnal.proficiency_choices).to.not.be.empty;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://www.dnd5eapi.co/api/2014/classes/barbarian",
+              "protocol": "https",
+              "host": [
+                "www",
+                "dnd5eapi",
+                "co"
+              ],
+              "path": [
+                "api",
+                "2014",
+                "classes",
+                "barbarian"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "classe_guerreiro",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const returnal = pm.response.json();\r",
+                  "\r",
+                  "pm.test('Não deve possuir o campo spellcasting', function ()\r",
+                  "{\r",
+                  "    pm.expect(returnal).to.not.have.property('spellcasting');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test('Deve existir proficiency com index \"all-armor\"', function () \r",
+                  "{\r",
+                  "    const hasHeavyArmor = returnal.proficiencies.some(p => p.index === \"all-armor\");\r",
+                  "    pm.expect(hasHeavyArmor).to.be.true;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test('Não deve conter saving throws inválidos para a classe guerreiro', function () \r",
+                  "{\r",
+                  "    const indexes = returnal.saving_throws.map(s => s.index);\r",
+                  "    const proibidos = ['dex', 'int', 'wis', 'cha']; // Lista de saving throws proibidos para a classe cleric\r",
+                  "    const temProibido = indexes.some(i => proibidos.includes(i));\r",
+                  "    pm.expect(temProibido).to.be.false;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://www.dnd5eapi.co/api/2014/classes/fighter",
+              "protocol": "https",
+              "host": [
+                "www",
+                "dnd5eapi",
+                "co"
+              ],
+              "path": [
+                "api",
+                "2014",
+                "classes",
+                "fighter"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "classe_inexistente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Deve retornar 404 para uma classe inexistente', function()\r",
+                  "{\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://www.dnd5eapi.co/api/2014/classes/bloodhunter",
+              "protocol": "https",
+              "host": [
+                "www",
+                "dnd5eapi",
+                "co"
+              ],
+              "path": [
+                "api",
+                "2014",
+                "classes",
+                "bloodhunter"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
