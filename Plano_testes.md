@@ -115,6 +115,26 @@ Foram utilizadas as seguintes tecnologias
 | TC-061 | Longsword possui propriedade versatile | API online e acessível | index: longsword | GET /api/2014/equipment/longsword | Array properties contém objeto com index "versatile" |
 | TC-062 | Dano com duas mãos da Longsword | API online e acessível | index: longsword | GET /api/2014/equipment/longsword | two_handed_damage.damage_dice igual a "1d10" e damage_type.index igual a "slashing" |
 | TC-063 | Tempo de resposta é menos de 1s | API online e acessível | index: longsword | GET /api/2014/equipment/longsword | responseTime abaixo de 1000ms |
+| TC-064 | Status da requisição de todas as classes deve ser 200 | API online e acessível | endpoint: classes | GET /api/2014/classes | Status igual a 200 |
+| TC-065 | Contagem total de classes deve ser 12 | API online e acessível | endpoint: classes | GET /api/2014/classes | count igual a 12 |
+| TC-066 | Primeira classe deve ser barbarian | API online e acessível | endpoint: classes | GET /api/2014/classes | results[0].index igual a "barbarian" |
+| TC-067 | Cada classe deve conter apenas index, name e url | API online e acessível | endpoint: classes | GET /api/2014/classes | Cada item possui somente "index", "name" e "url" |
+| TC-068 | URL da classe deve terminar com seu index | API online e acessível | endpoint: classes | GET /api/2014/classes | Último segmento da URL igual ao index |
+| TC-069 | Classe cleric deve possuir spellcasting | API online e acessível | index: cleric | GET /api/2014/classes/cleric | Propriedade spellcasting existente |
+| TC-070 | Habilidade de spellcasting do cleric deve ser wisdom | API online e acessível | index: cleric | GET /api/2014/classes/cleric | spellcasting.spellcasting_ability.index igual a "wis" |
+| TC-071 | Cleric não deve possuir proficiency all-armor | API online e acessível | index: cleric | GET /api/2014/classes/cleric | Não existe proficiency com index "all-armor" |
+| TC-072 | Cleric não deve conter saving throws inválidos | API online e acessível | index: cleric | GET /api/2014/classes/cleric | saving_throws não contém "str", "dex", "con", "int" |
+| TC-073 | Método POST não deve ser permitido | API online e acessível | endpoint: artificer | POST /api/2014/artificer | Status 404 ou 405 |
+| TC-074 | Método DELETE não deve ser permitido | API online e acessível | index: cleric | DELETE /api/2014/classes/cleric | Status 404 ou 405 |
+| TC-075 | Status da classe barbarian deve ser 200 | API online e acessível | index: barbarian | GET /api/2014/classes/barbarian | Status igual a 200 |
+| TC-076 | Hit die deve estar entre 6 e 12 | API online e acessível | index: barbarian | GET /api/2014/classes/barbarian | hit_die entre 6 e 12 |
+| TC-077 | Classe deve conter subclasses | API online e acessível | index: barbarian | GET /api/2014/classes/barbarian | Propriedade subclasses existente |
+| TC-078 | Classe deve possuir dois saving throws | API online e acessível | index: barbarian | GET /api/2014/classes/barbarian | saving_throws com tamanho 2 |
+| TC-079 | proficiency_choices não deve ser vazio | API online e acessível | index: barbarian | GET /api/2014/classes/barbarian | proficiency_choices não vazio |
+| TC-080 | Fighter não deve possuir spellcasting | API online e acessível | index: fighter | GET /api/2014/classes/fighter | Propriedade spellcasting inexistente |
+| TC-081 | Fighter deve possuir proficiency all-armor | API online e acessível | index: fighter | GET /api/2014/classes/fighter | Existe proficiency com index "all-armor" |
+| TC-082 | Fighter não deve conter saving throws inválidos | API online e acessível | index: fighter | GET /api/2014/classes/fighter | saving_throws não contém "dex", "int", "wis", "cha" |
+| TC-083 | Classe inexistente deve retornar 404 | API online e acessível | index: bloodhunter | GET /api/2014/classes/bloodhunter | Status igual a 404 |
 
 ## 6. Critérios de Aceite
 ---
