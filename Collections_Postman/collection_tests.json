@@ -511,7 +511,7 @@
           "script": {
             "exec": [
               "// teste Inválido",
-              "pm.test(\"TC-043 Valida se o método DELETE não é permitido em Monstres\", function(){",
+              "pm.test(\"TC-043 Valida se o método DELETE não é permitido em Monsters\", function(){",
               "    pm.expect(pm.response.code).to.be.oneOf([404, 405]);",
               "});",
               "",
@@ -1281,6 +1281,6 @@
         }
       },
       "response": []
-    },
+    }
   ]
 }
