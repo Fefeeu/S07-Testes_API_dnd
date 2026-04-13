@@ -214,6 +214,73 @@
       "response": []
     },
     {
+      "name": "alignments",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const resposta = pm.response.json();",
+              "",
+              "pm.test('TC-020 Statu deve ser 200 OK', function(){",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"TC-021 Json de resposta de alinhamento em results deve ter todos os campos\", function(){",
+              "    resposta.results.forEach((alinhamento) => {",
+              "        pm.expect(alinhamento).to.have.property(\"index\").that.is.a(\"string\").and.not.empty;",
+              "        pm.expect(alinhamento).to.have.property(\"name\").that.is.a(\"string\").and.not.empty;",
+              "        pm.expect(alinhamento).to.have.property(\"url\").that.is.a(\"string\").and.not.empty;",
+              "    });",
+              "});",
+              "    ",
+              "pm.test('TC-022 Devem existir 9 alinhamentos, na chave \"count\"', function () {",
+              "    pm.expect(resposta.count).to.equal(9);",
+              "});",
+              "",
+              "pm.test('TC-023 Devem existir 9 alinhamentos na lista results', function () {",
+              "    pm.expect(resposta.results).to.have.lengthOf(9)",
+              "});",
+              "",
+              "// teste Inválido",
+              "pm.test('TC-024 Verifica se não existe combinação invalida', function(){",
+              "    const combinacoesInvalidas = [",
+              "        \"chaotic-chaotic\", \"lawful-lawful\", \"neutral-neutral\", \"good-good\", \"evil-evil\"",
+              "    ];",
+              "",
+              "    resposta.results.forEach((alinhamento) => {",
+              "        combinacoesInvalidas.forEach((combo) => {",
+              "            pm.expect(alinhamento.index).to.not.equal(combo);",
+              "        });",
+              "    });",
+              "});",
+              "",
+              "pm.test(\"TC-025 Tempo de resposta a baixo do limite de tempo\", function(){",
+              "    pm.expect(pm.response.responseTime).to.be.below(1000)",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/alignments",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "alignments"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "todos_os_monstros",
       "event": [
         {
