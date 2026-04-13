@@ -6,6 +6,81 @@
   },
   "item": [
     {
+      "name": "Busca spells por nome (animate-dead)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// ---------  Testes positivos --------------\r",
+              "// Teste de status\r",
+              "pm.test(\"TC-001: Status code é 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "pm.test(\"TC-002: Mago e clerigo devem ser capaz de utilizar a magia\", function(){\r",
+              "    const classes = pm.response.json().classes;\r",
+              "    const temWizard = classes.some(c => c.index === 'wizard');\r",
+              "    const temCleric = classes.some(c => c.index === 'cleric' );\r",
+              "    \r",
+              "    pm.expect(temWizard).to.be.true;\r",
+              "    pm.expect(temCleric).to.be.true;\r",
+              "})\r",
+              "pm.test(\"TC-003: O level da magia deve ser 3\", function(){\r",
+              "    const resposta = pm.response.json()\r",
+              "    \r",
+              "    pm.expect(resposta.level).to.be.equal(3);\r",
+              "});\r",
+              "pm.test(\"TC-004: O material necessário para a magia deve ser um drop de sangue, uma peça de carne e uma gota de água\", function(){\r",
+              "    pm.expect(pm.response.json().material).to.equal(\"A drop of blood, a piece of flesh, and a pinch of bone dust.\");\r",
+              "});\r",
+              "pm.test(\"TC-005: As urls retornadas devem ser válidas\", function(){\r",
+              "    const resposta = pm.response.json()\r",
+              "    const school = resposta.school.url;\r",
+              "    const classes = resposta.classes.map(c => c.url);\r",
+              "    const subclasses = resposta.subclasses.map(c => c.url);\r",
+              "    const urls = [...classes, ...subclasses, school];\r",
+              "    // captura se a url começa com /api/2014/damage-type/\"qualquer valor que não seja /\" fim da string\r",
+              "    urls.forEach(url => {\r",
+              "        pm.expect(url).to.match(/^\\/api\\/2014\\/[^\\/]+\\/[^\\/]+$/);\r",
+              "    });\r",
+              "});\r",
+              "// ---------- Testes negativos -----------------------\r",
+              "pm.test(\"TC-006: O tempo de casting não deve ser maior que 1 minuto\", function(){\r",
+              "    const casting = parseInt(pm.response.json().casting_time.split(\" \")[0]);\r",
+              "    pm.expect(casting).not.to.be.greaterThan(1)\r",
+              "});\r",
+              "pm.test(\"TC-007: A magia não deve ser um ritual\", function(){\r",
+              "    const ritual = pm.response.json().ritual;\r",
+              "    pm.expect(ritual).to.be.false;\r",
+              "});\r",
+              "pm.test(\"TC-008: O range da magia não deve ser maior que 10 feet\", function(){\r",
+              "    const range = parseInt(pm.response.json().range.split(\" \")[0]);\r",
+              "    pm.expect(range).not.to.be.greaterThan(10);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}spells/animate-dead/",
+          "host": [
+            "{{baseURL}}spells"
+          ],
+          "path": [
+            "animate-dead",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "Busca spells por nome  (acid-arrow)",
       "event": [
         {
@@ -133,81 +208,6 @@
           "path": [
             "acid-arrow",
             ""
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Busca spells por nome (animate-dead)",
-      "request": {
-        "method": "GET",
-        "header": []
-      },
-      "response": []
-    },
-    {
-      "name": "alignments",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const resposta = pm.response.json();",
-              "",
-              "pm.test('TC-020 Statu deve ser 200 OK', function(){",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "",
-              "pm.test(\"TC-021 Json de resposta de alinhamento em results deve ter todos os campos\", function(){",
-              "    resposta.results.forEach((alinhamento) => {",
-              "        pm.expect(alinhamento).to.have.property(\"index\").that.is.a(\"string\").and.not.empty;",
-              "        pm.expect(alinhamento).to.have.property(\"name\").that.is.a(\"string\").and.not.empty;",
-              "        pm.expect(alinhamento).to.have.property(\"url\").that.is.a(\"string\").and.not.empty;",
-              "    });",
-              "});",
-              "    ",
-              "pm.test('TC-022 Devem existir 9 alinhamentos, na chave \"count\"', function () {",
-              "    pm.expect(resposta.count).to.equal(9);",
-              "});",
-              "",
-              "pm.test('TC-023 Devem existir 9 alinhamentos na lista results', function () {",
-              "    pm.expect(resposta.results).to.have.lengthOf(9)",
-              "});",
-              "",
-              "// teste Inválido",
-              "pm.test('TC-024 Verifica se não existe combinação invalida', function(){",
-              "    const combinacoesInvalidas = [",
-              "        \"chaotic-chaotic\", \"lawful-lawful\", \"neutral-neutral\", \"good-good\", \"evil-evil\"",
-              "    ];",
-              "",
-              "    resposta.results.forEach((alinhamento) => {",
-              "        combinacoesInvalidas.forEach((combo) => {",
-              "            pm.expect(alinhamento.index).to.not.equal(combo);",
-              "        });",
-              "    });",
-              "});",
-              "",
-              "pm.test(\"TC-025 Tempo de resposta a baixo do limite de tempo\", function(){",
-              "    pm.expect(pm.response.responseTime).to.be.below(1000)",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {},
-            "requests": {}
-          }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{baseURL}}/alignments",
-          "host": [
-            "{{baseURL}}"
-          ],
-          "path": [
-            "alignments"
           ]
         }
       },
