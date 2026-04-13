@@ -20,6 +20,7 @@ A suíte de testes cobrirá os endpoits listados a seguir, validando os seguinte
 
 **Endpoints Cobertos**
 - https://www.dnd5eapi.co/api/2014/equipments/
+	- https://www.dnd5eapi.co/api/2014/equipments/{equipments}
 
 - https://www.dnd5eapi.co/api/2014/alignments/
 
