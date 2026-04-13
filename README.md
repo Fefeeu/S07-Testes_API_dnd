@@ -166,7 +166,7 @@ Foram utilizadas as seguintes tecnologias
 | TC-084 | Tempo de resposta entre 100 e 1000ms | API online e acessível | endpoint: /classes | GET /api/2014/classes | Tempo de resposta entre 100 e 1000ms |
 
 
-## 6. Critérios de Aceite
+## 6. Critérios de Aceitação
 ---
 O sistema será considerado aceito a partir da execução dos testes e sua devida aprovação:
 
