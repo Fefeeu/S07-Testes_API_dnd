@@ -1,0 +1,33 @@
+services:
+  db:
+    build: ./data/db
+    
+    env_file:
+      - ./data/db/.env
+    
+    ports:
+      - "27017:27017"
+
+    volumes:
+      - db_data:/data/db
+
+    networks:
+      - pipeline
+
+  nginx:
+    build: ./nginx
+
+    ports:
+      - "80:80"
+
+    depends_on:
+      - db
+
+    networks:
+      - pipeline
+
+volumes:
+  db_data:
+
+networks:
+  pipeline:
