@@ -9,16 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gnupg \
     lsb-release \
     gosu \
-    xvfb \
-    xauth \
-    libgtk2.0-0 \
-    libgtk-3-0 \
-    libgbm1 \
-    libnss3 \
-    libxss1 \
-    libasound2 \
-    libxtst6 \
-    libnotify4 \
+    msmtp \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
@@ -39,13 +30,15 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg \
 RUN groupadd -f docker && usermod -aG docker jenkins
 
 # necessario criar um entrypoint pra função de notificação quando iniciar
-# COPY bota o path do entrypoint.sh aqui p
-# RUN chmod +x /usr/local/bin/BOTA_NOME_DO_ENTRYPOINT.sh
+COPY scripts/docker_entry.sh /usr/local/bin/docker_entry.sh
+RUN chmod +x /usr/local/bin/docker_entry.sh
 
 # adicionar no copy o caminho do plugin do jenkins
 COPY jenkins/plugin.txt /usr/share/jenkins/ref/plugin.txt
 RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugin.txt
 
+COPY scripts/msmtprc.template /etc/msmtprc.template
+
 EXPOSE 8080 50000
 
-# ENTRYPOINT ["/usr/local/bin/BOTA NOME DO ENTRYPOINT.sh"]
+ENTRYPOINT ["/usr/local/bin/docker_entry.sh"]
