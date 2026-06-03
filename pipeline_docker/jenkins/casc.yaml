@@ -1,0 +1,15 @@
+jenkins:
+  systemMessage: "Jenkins configurado automaticamente via CasC!"
+
+  numExecutors: 1
+
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: ${JENKINS_ADM_USER}
+          password: ${JENKINS_ADM_PASSWORD}
+
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false

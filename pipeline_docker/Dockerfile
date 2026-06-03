@@ -37,7 +37,11 @@ RUN chmod +x /usr/local/bin/docker_entry.sh
 COPY jenkins/plugin.txt /usr/share/jenkins/ref/plugin.txt
 RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugin.txt
 
-COPY scripts/msmtprc.template /etc/msmtprc.template
+# copia o arquivo de configuração casc.yaml para dentro da imagem
+COPY jenkins/casc.yaml /var/jenkins_home/casc.yaml
+ENV CASC_JENKINS_CONFIG=/var/jenkins_home/casc.yaml
+
+# COPY scripts/msmtprc.template /etc/msmtprc.template dando erro
 
 EXPOSE 8080 50000
 

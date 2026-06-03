@@ -17,3 +17,4 @@ plain-credentials:latest
 email-ext:latest
 ansicolor:latest
 timestamper:latest
+configuration-as-code:latest
