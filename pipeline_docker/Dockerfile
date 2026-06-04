@@ -41,7 +41,7 @@ RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugin.txt
 COPY jenkins/casc.yaml /var/jenkins_home/casc.yaml
 ENV CASC_JENKINS_CONFIG=/var/jenkins_home/casc.yaml
 
-# COPY scripts/msmtprc.template /etc/msmtprc.template dando erro
+COPY scripts/msmtp.template /etc/msmtp.template
 
 EXPOSE 8080 50000
 
