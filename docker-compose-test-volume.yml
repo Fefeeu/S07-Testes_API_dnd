@@ -35,6 +35,22 @@ services:
 
     networks:
       - pipeline
+
+  jenkins:
+    build: ./pipeline_docker
+
+    env_file:
+      - ./pipeline_docker/.env
+    
+    volumes:
+      - ./pipeline_docker/jenkins/casc.yaml:/var/jenkins_home/casc_configs/casc.yaml
+    
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    
+    networks:
+      - pipeline
       
 volumes:
   db_data:

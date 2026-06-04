@@ -37,9 +37,8 @@ RUN chmod +x /usr/local/bin/docker_entry.sh
 COPY jenkins/plugin.txt /usr/share/jenkins/ref/plugin.txt
 RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugin.txt
 
-# copia o arquivo de configuração casc.yaml para dentro da imagem
-COPY jenkins/casc.yaml /var/jenkins_home/casc.yaml
-ENV CASC_JENKINS_CONFIG=/var/jenkins_home/casc.yaml
+# cria a variavel de ambiente com base no volume do docker compose
+ENV CASC_JENKINS_CONFIG=/var/jenkins_home/casc_configs/casc.yaml
 
 COPY scripts/msmtp.template /etc/msmtp.template
 

@@ -26,9 +26,9 @@ if [[ -n "${GMAIL_USER:-}" && -n "${GMAIL_PASS:-}" ]]; then
     sed \
         -e "s/GMAIL_USER_PLACEHOLDER/${GMAIL_USER}/g" \
         -e "s/GMAIL_PASS_PLACEHOLDER/${GMAIL_PASS}/g" \
-        /etc/msmtprc.template > /etc/msmtprc
-    chmod 600 /etc/msmtprc
-    chown jenkins:jenkins /etc/msmtprc
+        /etc/msmtp.template > /etc/msmtp
+    chmod 600 /etc/msmtp
+    chown jenkins:jenkins /etc/msmtp
     echo "[OK] Configuração do msmtp gerada com sucesso."
 else
     echo "[AVISO] GMAIL_USER ou GMAIL_PASS não definidos."
