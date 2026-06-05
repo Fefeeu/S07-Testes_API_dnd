@@ -32,19 +32,23 @@ credentials:
               description: "Email destinatário"
 
 jobs:
-- script: >
-    pipelineJob('run-jenkinsfile') {
-      definition {
-        cpsScm {
-          scm {
-            git {
-              remote {
-                url('https://github.com/Fefeeu/S07-Testes_API_dnd.git')
+  - script: >
+      pipelineJob('run-pipeline') {
+        quietPeriod(0)
+        triggers {
+          cron('* * * * *')
+        }
+        definition {
+          cpsScm {
+            scm {
+              git {
+                remote {
+                  url('https://github.com/Fefeeu/S07-Testes_API_dnd.git')
+                }
+                branch('*/main')
               }
-              branch('*/main')
             }
+            scriptPath('Jenkinsfile')
           }
-          scriptPath('Jenkinsfile')
         }
       }
-    }
