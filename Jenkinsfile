@@ -1,29 +1,36 @@
 pipeline {
     agent any
+
     stages {
         stage('Run Postman Tests') {
             steps {
-                sh 'newman run Collections_Postman/collection_guico.json'
+                sh '''
+                    newman run Collections_Postman/collection_guico.json \
+                        --reporters cli,htmlextra \
+                        --reporter-htmlextra-export report.html
+                '''
             }
         }
     }
+
     post {
+        always {
+            archiveArtifacts artifacts: 'report.html', allowEmptyArchive: true
+        }
         success {
             withCredentials([string(credentialsId: 'email-destinatario', variable: 'DESTINATARIO')]) {
-                script {
-                    def buildUrl = env.BUILD_URL ?: 'N/A'
-                    def dest = DESTINATARIO
-                    sh "/usr/local/bin/email.sh sucesso '${buildUrl}' '${dest}'"
-                }
+                sh '''
+                    URL="${BUILD_URL:-http://localhost:8080}"
+                    /usr/local/bin/email.sh sucesso "$URL" "$DESTINATARIO"
+                '''
             }
         }
         failure {
             withCredentials([string(credentialsId: 'email-destinatario', variable: 'DESTINATARIO')]) {
-                script {
-                    def buildUrl = env.BUILD_URL ?: 'N/A'
-                    def dest = DESTINATARIO
-                    sh "/usr/local/bin/email.sh falha '${buildUrl}' '${dest}'"
-                }
+                sh '''
+                    URL="${BUILD_URL:-http://localhost:8080}"
+                    /usr/local/bin/email.sh falha "$URL" "$DESTINATARIO"
+                '''
             }
         }
     }
