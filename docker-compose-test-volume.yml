@@ -1,54 +1,48 @@
 services:
   db:
     build: ./data/db
-    
+    restart: always
     env_file:
       - ./data/db/.env
-    
     ports:
       - "27017:27017"
-
     volumes:
       - db_data:/data/db
-
     networks:
       - pipeline
 
   nginx:
-    build: ./nginx
-
+    build:
+      context: . 
+      dockerfile: nginx/Dockerfile
     ports:
       - "80:80"
-
     depends_on:
       - db
-
     networks:
       - pipeline
+
   newman:
     build: ./newman
-
+    entrypoint: ["tail", "-f", "/dev/null"] 
     volumes:
-      - ./newman/collection_tests.json:/app/collection_tests.json
-      - ./newman/Environment dnd5e.postman_environment.json:/app/Environment dnd5e.postman_environment.json
-      - ./data/ultimo_relatorio:/app/reports
-
+      - ./newman:/app/newman
+      - ./newman_reports:/app/reports
     networks:
       - pipeline
 
   jenkins:
     build: ./pipeline_docker
-
+    user: root
     env_file:
       - ./pipeline_docker/.env
-    
     volumes:
       - ./pipeline_docker/jenkins/casc.yaml:/var/jenkins_home/casc_configs/casc.yaml
-    
+      - /var/run/docker.sock:/var/run/docker.sock 
+      # - .:/var/jenkins_home/workspace/projeto-s07 
     ports:
       - "8080:8080"
       - "50000:50000"
-    
     networks:
       - pipeline
       

@@ -12,7 +12,7 @@ usuario = os.getenv("MONGO_INITDB_ROOT_USERNAME")
 senha = os.getenv("MONGO_INITDB_ROOT_PASSWORD")
 banco = os.getenv("MONGO_INITDB_DATABASE")
 
-URL = f"mongodb://{usuario}:{senha}@localhost:27017/"
+URL = f"mongodb://{usuario}:{senha}@db:27017/"
 
 client = MongoClient(URL)
 db = client[banco]
