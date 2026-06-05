@@ -14,6 +14,23 @@ jenkins:
     loggedInUsersCanDoAnything:
       allowAnonymousRead: false
 
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - string:
+              id: "gmail-user"
+              secret: "${GMAIL_USER}"
+              description: "Email remetente Gmail"
+          - string:
+              id: "gmail-pass"
+              secret: "${GMAIL_PASS}"
+              description: "Senha de app Gmail"
+          - string:
+              id: "email-destinatario"
+              secret: "${EMAIL_DESTINATARIO}"
+              description: "Email destinatário"
+
 jobs:
 - script: >
     pipelineJob('run-jenkinsfile') {

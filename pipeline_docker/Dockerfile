@@ -35,6 +35,10 @@ RUN groupadd -f docker && usermod -aG docker jenkins
 COPY scripts/docker_entry.sh /usr/local/bin/docker_entry.sh
 RUN chmod +x /usr/local/bin/docker_entry.sh
 
+# copiando o script de email.sh para a imagem
+COPY scripts/email.sh /usr/local/bin/email.sh
+RUN chmod +x /usr/local/bin/email.sh
+
 # adicionar no copy o caminho do plugin do jenkins
 COPY jenkins/plugin.txt /usr/share/jenkins/ref/plugin.txt
 RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugin.txt

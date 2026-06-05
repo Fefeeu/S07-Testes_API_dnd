@@ -29,6 +29,9 @@ if [[ -n "${GMAIL_USER:-}" && -n "${GMAIL_PASS:-}" ]]; then
         /etc/msmtp.template > /etc/msmtp
     chmod 600 /etc/msmtp
     chown jenkins:jenkins /etc/msmtp
+    echo "$GMAIL_USER" > /etc/gmail_user
+    chmod 644 /etc/gmail_user
+    chown jenkins:jenkins /etc/gmail_user
     echo "[OK] Configuração do msmtp gerada com sucesso."
 else
     echo "[AVISO] GMAIL_USER ou GMAIL_PASS não definidos."

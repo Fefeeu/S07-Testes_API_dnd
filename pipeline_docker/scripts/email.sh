@@ -16,6 +16,9 @@ if [[ "$STATUS" != "sucesso" && "$STATUS" != "falha" ]]; then
     exit 1
 fi
 
+# Lê o endereço do remetente salvo pelo docker_entry.sh
+GMAIL_USER=$(cat /etc/gmail_user 2>/dev/null || echo "noreply@gmail.com")
+
 # Data/hora em que o pipeline rodou
 TIMESTAMP=$(date '+%d/%m/%Y às %H:%M:%S')
 
@@ -88,7 +91,7 @@ EOF
 # Mensagens de status do envio do email:
 echo "[INFO] Enviando e-mail para '${DESTINATARIO}'..."
 
-if echo "$CORPO_EMAIL" | msmtp -a default "$DESTINATARIO"; then
+if echo "$CORPO_EMAIL" | msmtp --file=/etc/msmtp -a default "$DESTINATARIO"; then
     echo "[OK] E-mail enviado com sucesso para ${DESTINATARIO}"
     exit 0
 else
