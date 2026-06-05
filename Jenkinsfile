@@ -1,5 +1,6 @@
 pipeline {
     agent any
+
     stages {
         stage('Run Postman Tests') {
             steps {
@@ -11,18 +12,25 @@ pipeline {
             }
         }
     }
+
     post {
         always {
             archiveArtifacts artifacts: 'report.html', allowEmptyArchive: true
         }
         success {
             withCredentials([string(credentialsId: 'email-destinatario', variable: 'DESTINATARIO')]) {
-                sh '/usr/local/bin/email.sh sucesso "$BUILD_URL" "$DESTINATARIO"'
+                sh '''
+                    URL="${BUILD_URL:-http://localhost:8080}"
+                    /usr/local/bin/email.sh sucesso "$URL" "$DESTINATARIO"
+                '''
             }
         }
         failure {
             withCredentials([string(credentialsId: 'email-destinatario', variable: 'DESTINATARIO')]) {
-                sh '/usr/local/bin/email.sh falha "$BUILD_URL" "$DESTINATARIO"'
+                sh '''
+                    URL="${BUILD_URL:-http://localhost:8080}"
+                    /usr/local/bin/email.sh falha "$URL" "$DESTINATARIO"
+                '''
             }
         }
     }
