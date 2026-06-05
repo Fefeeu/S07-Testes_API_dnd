@@ -33,7 +33,7 @@
 
 ## 1. Escopo 
 ---
-O sistema a ser testado é a D&D 5th Edition API (https://www.dnd5eapi.co), uma API REST pública que fornece dados do jogo de RPG Dungeons & Dragons em sua 5ª edição. 
+O sistema a ser testado é a D&D 5th Edition API (https://www.dnd5eapi.co), uma API REST pública que fornece dados do jogo de RPG Dungeons & Dragons em sua 5ª edição
 
 A suíte de testes cobrirá os endpoits listados a seguir, validando os seguintes aspectos: 
 - Recuperação de magias individuais por índice (ex: acid-arrow)
