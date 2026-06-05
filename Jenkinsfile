@@ -27,12 +27,12 @@ pipeline {
     post {
         success {
             withCredentials([string(credentialsId: 'email-destinatario', variable: 'DESTINATARIO')]) {
-                sh "/usr/local/bin/email.sh sucesso '${env.BUILD_URL}' '${DESTINATARIO}'"
+                sh '/usr/local/bin/email.sh sucesso "$BUILD_URL" "$DESTINATARIO"'
             }
         }
         failure {
             withCredentials([string(credentialsId: 'email-destinatario', variable: 'DESTINATARIO')]) {
-                sh "/usr/local/bin/email.sh falha '${env.BUILD_URL}' '${DESTINATARIO}'"
+                sh '/usr/local/bin/email.sh falha "$BUILD_URL" "$DESTINATARIO"'
             }
         }
     }
