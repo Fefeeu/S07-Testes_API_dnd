@@ -27,6 +27,8 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg \
     && apt-get install -y --no-install-recommends docker-ce-cli \
     && rm -rf /var/lib/apt/lists/*
 
+RUN npm install -g newman
+
 RUN groupadd -f docker && usermod -aG docker jenkins
 
 # necessario criar um entrypoint pra função de notificação quando iniciar
@@ -37,8 +39,11 @@ RUN chmod +x /usr/local/bin/docker_entry.sh
 COPY jenkins/plugin.txt /usr/share/jenkins/ref/plugin.txt
 RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugin.txt
 
-# cria a variavel de ambiente com base no volume do docker compose
+# cria a variavel de ambiente do casc.yaml com base no volume do docker compose
 ENV CASC_JENKINS_CONFIG=/var/jenkins_home/casc_configs/casc.yaml
+
+# desliga a inicialização guiada
+ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
 
 COPY scripts/msmtp.template /etc/msmtp.template
 

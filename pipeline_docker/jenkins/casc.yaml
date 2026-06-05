@@ -13,3 +13,21 @@ jenkins:
   authorizationStrategy:
     loggedInUsersCanDoAnything:
       allowAnonymousRead: false
+
+jobs:
+- script: >
+    pipelineJob('run-jenkinsfile') {
+      definition {
+        cpsScm {
+          scm {
+            git {
+              remote {
+                url('https://github.com/Fefeeu/S07-Testes_API_dnd.git')
+              }
+              branch('*/main')
+            }
+          }
+          scriptPath('Jenkinsfile')
+        }
+      }
+    }

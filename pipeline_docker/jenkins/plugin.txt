@@ -18,3 +18,4 @@ email-ext:latest
 ansicolor:latest
 timestamper:latest
 configuration-as-code:latest
+job-dsl:latest
