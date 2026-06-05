@@ -31,7 +31,7 @@ services:
     volumes:
       - ./newman/collection_tests.json:/app/collection_tests.json
       - ./newman/Environment dnd5e.postman_environment.json:/app/Environment dnd5e.postman_environment.json
-      - ./nginx/relatorio_para_testar:/app/reports
+      - ./data/ultimo_relatorio:/app/reports
 
     networks:
       - pipeline
