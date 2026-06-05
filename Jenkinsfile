@@ -1,6 +1,5 @@
 pipeline {
     agent any
-
     stages {
         stage('Checkout') {
             steps {
@@ -13,16 +12,23 @@ pipeline {
             }
         }
     }
-
     post {
         success {
             withCredentials([string(credentialsId: 'email-destinatario', variable: 'DESTINATARIO')]) {
-                sh '/usr/local/bin/email.sh sucesso "$BUILD_URL" "$DESTINATARIO"'
+                script {
+                    def buildUrl = env.BUILD_URL ?: 'N/A'
+                    def dest = DESTINATARIO
+                    sh "/usr/local/bin/email.sh sucesso '${buildUrl}' '${dest}'"
+                }
             }
         }
         failure {
             withCredentials([string(credentialsId: 'email-destinatario', variable: 'DESTINATARIO')]) {
-                sh '/usr/local/bin/email.sh falha "$BUILD_URL" "$DESTINATARIO"'
+                script {
+                    def buildUrl = env.BUILD_URL ?: 'N/A'
+                    def dest = DESTINATARIO
+                    sh "/usr/local/bin/email.sh falha '${buildUrl}' '${dest}'"
+                }
             }
         }
     }
