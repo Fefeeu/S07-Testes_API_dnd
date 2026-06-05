@@ -21,6 +21,7 @@ pipeline {
             withCredentials([string(credentialsId: 'email-destinatario', variable: 'DESTINATARIO')]) {
                 sh '''
                     URL="${BUILD_URL:-http://localhost:8080}"
+                    export WORKSPACE="$WORKSPACE"
                     /usr/local/bin/email.sh sucesso "$URL" "$DESTINATARIO"
                 '''
             }
