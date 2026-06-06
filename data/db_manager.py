@@ -125,16 +125,15 @@ def get_info_relatorio(caminho_arquivo):
             file_information, timings_and_data, summary)
 
 if __name__ == "__main__":
-    arquivos_html = sorted(glob.glob("newman_reports/*.html"))
+    caminho_html = "newman_reports/report_testes.html"
 
-    if not arquivos_html:
+    if not os.path.exists(caminho_html):
         print("Nenhum relatório encontrado")
     else:
-        caminho_atual = arquivos_html[-1]  # pega o mais recente
-        print(f"Processando relatório: {caminho_atual}")
+        print(f"Processando relatório: {caminho_html}")
         
         (data, dia_semana, horario, iterations, assertions, failed, skipped, 
-         file_information, timings_and_data, summary) = get_info_relatorio(caminho_atual)
+         file_information, timings_and_data, summary) = get_info_relatorio(caminho_html)
 
         salva_log(data, dia_semana, horario,
                 iterations, assertions, failed, skipped,
