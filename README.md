@@ -168,6 +168,10 @@ A IA não substituiu decisões de arquitetura — essas foram tomadas pelo grupo
 
 > Resposta: Satisfatória, identificou que o volume `.:/var/jenkins_home/workspace/projeto-s07` estava causando conflito de permissões e orientou a remoção do volume para que o Jenkins gerenciasse o workspace internamente.
 
+### Exemplo 4: Chat com desenvolvimento do Newman
+
+[Chat com Claude na parte do Newman](https://claude.ai/share/c8efc3ac-2684-4d0b-bb8c-6dddfac78478)
+
 ### 5. O que não foi feito com ajuda de IA
 
 - Definição da arquitetura dos 5 containers e seus papéis
@@ -175,3 +179,4 @@ A IA não substituiu decisões de arquitetura — essas foram tomadas pelo grupo
 - Escrita e organização da collection Postman
 - Commits e versionamento do repositório
 - Decisões sobre nomes de variáveis de ambiente e estrutura de pastas
+- Mudanças feitas pós entendimento com a IA
