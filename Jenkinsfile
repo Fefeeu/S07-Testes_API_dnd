@@ -7,7 +7,8 @@ pipeline {
         DIST_DIR = 'dist'
         MONGO_INITDB_ROOT_USERNAME = credentials('mongo-user')
         MONGO_INITDB_ROOT_PASSWORD = credentials('mongo-pass')
-        MONGO_INITDB_DATABASE      = 'pipeline_logs'
+        MONGO_INITDB_DATABASE = credentials('mongo-db')
+
     }
 
     stages {
