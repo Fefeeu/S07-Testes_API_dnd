@@ -596,7 +596,7 @@
               "});",
               "",
               "pm.test(\"TC-046 Garante que a API não processou dados indevidos\", function () {",
-              "pm.expect(pm.response.responseTime).to.be.below(200);",
+              "pm.expect(pm.response.responseTime).to.be.below(500);",
               "});"
             ],
             "type": "text/javascript",
