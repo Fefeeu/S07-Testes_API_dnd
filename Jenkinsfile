@@ -74,15 +74,17 @@ pipeline {
         success {
             script {
                 def buildUrl = env.BUILD_URL ?: 'N/A'
+                def reportPath = "${env.WORKSPACE}/${env.REPORTS_DIR}/report_testes.html"
                 echo "Enviando e-mail de sucesso para o endereço configurado na env: ${env.DESTINATARIO}"
-                sh "bash pipeline_docker/scripts/email.sh sucesso '${buildUrl}' '${env.DESTINATARIO}'"
+                sh "bash pipeline_docker/scripts/email.sh sucesso '${buildUrl}' '${env.DESTINATARIO}' '${reportPath}'"
             }
         }
         failure {
             script {
                 def buildUrl = env.BUILD_URL ?: 'N/A'
+                def reportPath = "${env.WORKSPACE}/${env.REPORTS_DIR}/report_testes.html"
                 echo "Enviando e-mail de falha para o endereço configurado na env: ${env.DESTINATARIO}"
-                sh "bash pipeline_docker/scripts/email.sh falha '${buildUrl}' '${env.DESTINATARIO}'"
+                sh "bash pipeline_docker/scripts/email.sh falha '${buildUrl}' '${env.DESTINATARIO}' '${reportPath}'"
             }
         }
     }
