@@ -36,9 +36,16 @@ executadas via Newman (CLI).
 Crie um arquivo `.env` na raiz do projeto com base no `.env.example`:
 
 ```env
+JENKINS_ADM_USER=user_jenkins
+JENKINS_ADM_PASSWORD=password_jenkins
+
 GMAIL_USER=seu-email@gmail.com
 GMAIL_PASS=sua-senha-de-aplicativo
 EMAIL_DESTINATARIO=destinatario@email.com
+
+MONGO_INITDB_ROOT_USERNAME=user_mongo
+MONGO_INITDB_ROOT_PASSWORD=senha_mongo
+MONGO_INITDB_DATABASE=db_de_testes
 ```
 
 > ⚠️ Nunca commite o arquivo `.env` real. Ele está no `.gitignore`.
@@ -46,34 +53,33 @@ EMAIL_DESTINATARIO=destinatario@email.com
 ### Como Executar
 
 ```bash
-execução
+docker compose -f docker-compose.yml up --build -d
 ```
 
 ---
 
 ## 🛠️ Funcionalidades e Arquitetura
 
-O ecossistema é composto por 4 containers trabalhando em conjunto:
+O ecossistema é composto por 5 containers trabalhando em conjunto:
 
-| Container    | Papel                                      | Imagem         |
-|--------------|--------------------------------------------|----------------|
-| jenkins      | Orquestra o pipeline CI/CD                 | Dockerfile local |
-| test-runner  | Executa os testes Newman da collection     | Docker Hub     |
-| nginx        | Serve o relatório HTML gerado pelo Newman  | Docker Hub     |
-| db           | Persiste o histórico de execuções          | Docker Hub     |
+| Container     | Papel                                          | Imagem         |
+|---------------|------------------------------------------------|----------------|
+| jenkins       | Orquestra o pipeline CI/CD                     | Dockerfile local |
+| newman        | Container auxiliar de testes Newman            | Dockerfile local |
+| nginx         | Serve arquivos estáticos do projeto            | Dockerfile local |
+| db            | Persiste o histórico de execuções (MongoDB)    | Docker Hub     |
+| mongo-express | Visualização e administração do MongoDB        | Docker Hub     |
 
 ### Comunicação entre Containers
 
-O container **jenkins** se comunica com o **test-runner** para disparar a
-execução da collection. O **test-runner** salva o relatório HTML em um volume
-compartilhado, que o **nginx** serve na porta 8081.
+O container **jenkins** se comunica diretamente com o **db** (MongoDB) para
+persistir os logs de execução do pipeline. O **mongo-express** também se
+comunica com o **db** para exibir os dados via interface web na porta 8081.
+Todos os containers estão na mesma rede Docker (`pipeline`).
 
 ### Volumes (Persistência)
 
-- `relatorios_volume` — compartilhado entre test-runner e nginx, persiste os
-  relatórios HTML gerados pelo Newman
-- `jenkins_home` — persiste as configurações, jobs e histórico do Jenkins
-- `db_data` — persiste o histórico de execuções do banco de dados
+- `db_data` — persiste os dados do MongoDB entre reinicializações do container
 
 ---
 
@@ -85,19 +91,18 @@ Nenhuma etapa foi configurada pela interface gráfica do Jenkins.
 Etapas do pipeline:
 
 1. **Checkout** — clonagem do repositório público do GitHub
-2. **Testes** — execução da collection via Newman com cobertura ≥ 90%
-3. **Build/Empacotamento** — o relatório HTML e o resultado dos testes são
-   arquivados como artefatos no Jenkins
-4. **Notificação** — disparo do `script_email.sh` com status, autor do commit
-   e links para os relatórios, usando variáveis de ambiente sem credenciais
-   expostas no código
+2. **Setup** — criação dos diretórios de saída necessários
+3. **Testes** — execução da collection via Newman com cobertura ≥ 90%
+4. **Build/Empacotamento** — geração do pacote `.tar.gz` com os artefatos do projeto
+5. **Save Log** — persistência das métricas de execução no MongoDB
+6. **Archive Artifacts** — relatório HTML e pacote arquivados no Jenkins
+7. **Notificação** — disparo do `email.sh` com status e link do build, usando variáveis de ambiente sem credenciais expostas no código
 
 ---
 
-## 🔗 Links
+## 🔗 Link Docker Hub
 
-- **Repositório GitHub:** (inserir link)
-- **Imagem no Docker Hub:** (inserir link)
+- **Imagem no Docker Hub:** https://hub.docker.com/r/guilhermeguiko/server
 
 ---
 
@@ -111,58 +116,61 @@ o uso de ferramentas de IA no desenvolvimento do projeto.
 - **Claude (Anthropic)** — utilizado como principal assistente ao longo do
   desenvolvimento
 
-  Claude foi a escolha mais óbvia pela sua qualidade ao se tratar de problemas de programção, além da excelente feature de criação de pastas de projetos, onde são passadas instruções e dados sobre um projeto e diversos chats podem ser adicionados a este projeto, com todos seguindo as instruções previamente definidas.
-
 ### 2. Escopo de Aplicação
 
 A IA foi utilizada nas seguintes frentes:
 
 - Compreensão e explicação de conceitos de Docker, Dockerfile e Docker Compose
 - Orientação na estruturação do pipeline Jenkins e escrita do Jenkinsfile
-- Adaptação dos scripts de notificação por e-mail (`script_email.sh`,
-  `docker-entrypoint.sh`, `msmtprc.template`) para o contexto do projeto
+- Adaptação dos scripts de notificação por e-mail (`email.sh`, `docker_entry.sh`, `msmtp.template`) para o contexto do projeto
 - Revisão e correção do Dockerfile do Jenkins
 - Sugestões de boas práticas de versionamento e mensagens de commit
 - Revisão deste README
-- Escrita e revisão de códigos burocráticos tais como casc.yaml
-- Explicação da estrutura de configuração automática do servidor Jenkins
+- Escrita e revisão do `casc.yaml` para configuração automática do Jenkins
+- Explicação da estrutura de configuração automática do servidor Jenkins via CasC
 
 ### 3. Dinâmica de Trabalho
 
 A IA foi utilizada de forma assistida — nenhum trecho foi copiado sem leitura
-e compreensão prévia. O fluxo adotado foi: o integrante responável pela tarefa
+e compreensão prévia. O fluxo adotado foi: o integrante responsável pela tarefa
 consultava a IA para entender o conceito, recebia uma explicação, e então
 implementava ou adaptava o código com base no entendimento adquirido.
 
 A IA não substituiu decisões de arquitetura — essas foram tomadas pelo grupo
-(como a escolha dos 4 containers e a divisão de responsabilidades entre eles).
+(como a escolha dos 5 containers e a divisão de responsabilidades entre eles).
 
 ### 4. Prompts Utilizados (exemplos reais)
 
 ### Exemplo 1: Contextualização do Projeto e Primeiros Passos
 
 *Contexto do Projeto:*
-*No projeto anterior, nosso grupo desenvolveu uma coleção de testes no Postman para a API oficial do D&D 5e (anexei o JSON dessa collection oficial na estrutura do projeto que criei utilizando a feature de projetos do claude, com instruções detalhadas de como me orientar a etender a resposta). Agora, para este novo projeto, precisamos seguir estritamente as diretrizes especificadas no documento "Projeto_S07_NP2.pdf", focando no desenvolvimento e na aplicação prática da infraestrutura DevOps. Durante a nossa conversa, vou pedir orientações sobre os conceitos de DevOps que estamos aplicando aqui.*
+*No projeto anterior, nosso grupo desenvolveu uma coleção de testes no Postman para a API oficial do D&D 5e. Agora, para este novo projeto, precisamos seguir estritamente as diretrizes especificadas no documento "Projeto_S07_NP2.pdf", focando no desenvolvimento e na aplicação prática da infraestrutura DevOps. Durante a nossa conversa, vou pedir orientações sobre os conceitos de DevOps que estamos aplicando aqui.*
 
-*Primeiro quero entender o Dockerfile do ambiente de testes (que no nosso caso será a base com o Jenkins). Depois disso, criarei o `Jenkinsfile` com as instruções corretas do pipeline.* 
+*Primeiro quero entender o Dockerfile do ambiente de testes (que no nosso caso será a base com o Jenkins). Depois disso, criarei o `Jenkinsfile` com as instruções corretas do pipeline.*
 
 *Vou te enviar o Dockerfile de exemplo que o professor disponibilizou. Quero entender detalhadamente o que significa cada instrução dele e como eu montaria essa estrutura do zero. Em seguida como devo estruturar o dockerfile do jenkins para nosso projeto*
 
-> Resposta: Satisfatória, abordou linha por linha explicando a sintaxe do dockerfile, o que eu deveria manter para meu projeto e por que de cada utilização dos comandos listados. 
+> Resposta: Satisfatória, abordou linha por linha explicando a sintaxe do Dockerfile, o que eu deveria manter para meu projeto e por que de cada utilização dos comandos listados.
 
 ### Exemplo 2: Análise de Plugins e Estrutura do Entrypoint
 
-*Antes de avançarmos para o desenvolvimento do script de e-mail e do `docker_entrypoint.sh`, preciso entender a fundo o ecossistema de plugins do Jenkins e a lógica de inicialização do container. Vou enviar a lista de plugins do projeto de exemplo do professor para avaliarmos o que realmente se aplica ao nosso escopo.*
+*Antes de avançarmos para o desenvolvimento do script de e-mail e do `docker_entry.sh`, preciso entender a fundo o ecossistema de plugins do Jenkins e a lógica de inicialização do container. Vou enviar a lista de plugins do projeto de exemplo do professor para avaliarmos o que realmente se aplica ao nosso escopo.*
 
 *Quero entender:*
-* *Quais desses plugins são estritamente necessários para o nosso projeto NP2, quais seriam úteis e o que cada um deles faz na prática.*
-* *O que é o Docker Entrypoint, por que ele é necessário, como ele deve ser estruturado corretamente e qual é o papel do comando `exec "$@"` no final do script.*
+- *Quais desses plugins são estritamente necessários para o nosso projeto NP2, quais seriam úteis e o que cada um deles faz na prática.*
+- *O que é o Docker Entrypoint, por que ele é necessário, como ele deve ser estruturado corretamente e qual é o papel do comando `exec "$@"` no final do script.*
 
-> Resposta: satisfatória, abordou linha a linha os comandos e a estrutura correta de um arquivo docker_entrypoint.sh e por que ele deve ser criado e utilizado.
+> Resposta: Satisfatória, abordou linha a linha os comandos e a estrutura correta de um arquivo `docker_entry.sh` e por que ele deve ser criado e utilizado.
 
-### 5. O que não foi feito por IA
+### Exemplo 3: Depuração de Erros no Pipeline
 
-- Definição da arquitetura dos 4 containers e seus papéis
+*O pipeline está falhando com o erro `AccessDeniedException` ao tentar criar o workspace. O log mostra: `java.nio.file.AccessDeniedException: /var/jenkins_home/workspace/run-jenkinsfile@script`. Como resolvo esse problema no docker-compose?*
+
+> Resposta: Satisfatória, identificou que o volume `.:/var/jenkins_home/workspace/projeto-s07` estava causando conflito de permissões e orientou a remoção do volume para que o Jenkins gerenciasse o workspace internamente.
+
+### 5. O que não foi feito com ajuda de IA
+
+- Definição da arquitetura dos 5 containers e seus papéis
 - Escolha da API do D&D 5e como sistema a ser testado
 - Escrita e organização da collection Postman
 - Commits e versionamento do repositório
