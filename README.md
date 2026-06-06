@@ -76,6 +76,8 @@ persistir os logs de execução do pipeline. O **mongo-express** também se
 comunica com o **db** para exibir os dados via interface web na porta 8081.
 Todos os containers estão na mesma rede Docker (`pipeline`).
 
+Visualização do Banco de Dados: "http://localhost:8081/db/logs_de_teste/historico?"
+
 ### Volumes (Persistência)
 
 - `db_data` — persiste os dados do MongoDB entre reinicializações do container
