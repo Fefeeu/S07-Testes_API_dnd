@@ -63,9 +63,9 @@ pipeline {
             steps {
                 echo 'Arquivando o pacote e os relatórios no Jenkins (Requisito Obrigatório)...'
                 // Salva o relatório de testes e o pacote gerado diretamente no Jenkins
-                archiveArtifacts artifacts: "${REPOR1TS_DIR}/*.html, ${DIST_DIR}/*.tar.gz", 
-                                 fingerprint: true, 
-                                 allowEmptyArchive: false
+                archiveArtifacts artifacts: "${REPORTS_DIR}/*.html, ${DIST_DIR}/*.tar.gz", 
+                fingerprint: true, 
+                allowEmptyArchive: false
             }
         }
     }
@@ -75,7 +75,6 @@ pipeline {
             script {
                 def buildUrl = env.BUILD_URL ?: 'N/A'
                 echo "Enviando e-mail de sucesso para o endereço configurado na env: ${env.DESTINATARIO}"
-                // Chama o seu script de e-mail localizado na pasta do projeto
                 sh "bash pipeline_docker/scripts/email.sh sucesso '${buildUrl}' '${env.DESTINATARIO}'"
             }
         }
