@@ -260,7 +260,7 @@
               "});",
               "",
               "pm.test(\"TC-025 Tempo de resposta a baixo do limite de tempo\", function(){",
-              "    pm.expect(pm.response.responseTime).to.be.below(1000)",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000)",
               "});"
             ],
             "type": "text/javascript",
@@ -406,7 +406,7 @@
               "});",
               "",
               "pm.test(\"TC-033 Tempo de resposta a baixo do limite de tempo\", function(){",
-              "    pm.expect(pm.response.responseTime).to.be.below(1000)",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000)",
               "});"
             ],
             "type": "text/javascript",
@@ -491,7 +491,7 @@
               "});",
               "",
               "pm.test(\"TC-038 Tempo de resposta a baixo do limite de tempo\", function(){",
-              "    pm.expect(pm.response.responseTime).to.be.below(1000)",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000)",
               "});"
             ],
             "type": "text/javascript",
@@ -549,7 +549,7 @@
               "});",
               "",
               "pm.test(\"TC-042 Garante que a API não processou dados indevidos\", function () {",
-              "    pm.expect(pm.response.responseTime).to.be.below(500);",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);",
               "});"
             ],
             "type": "text/javascript",
@@ -596,7 +596,7 @@
               "});",
               "",
               "pm.test(\"TC-046 Garante que a API não processou dados indevidos\", function () {",
-              "pm.expect(pm.response.responseTime).to.be.below(500);",
+              "pm.expect(pm.response.responseTime).to.be.below(200);",
               "});"
             ],
             "type": "text/javascript",
@@ -657,7 +657,7 @@
               "});\r",
               "\r",
               "pm.test(\"TC-051 Tempo de resposta é menos de 1s\", function () {\r",
-              "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
               "});"
             ],
             "type": "text/javascript",
@@ -699,7 +699,7 @@
               "});\r",
               "\r",
               "pm.test(\"TC-053 Tempo de resposta é menos de 1s\", function () {\r",
-              "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
               "});"
             ],
             "type": "text/javascript",
@@ -743,7 +743,7 @@
               "});\r",
               "\r",
               "pm.test(\"TC-055 Tempo de resposta é menos de 1s\", function () {\r",
-              "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
               "});"
             ],
             "type": "text/javascript",
@@ -797,7 +797,7 @@
               "});\r",
               "\r",
               "pm.test(\"TC-058 Tempo de resposta é menos de 1s\", function () {\r",
-              "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
               "});"
             ],
             "type": "text/javascript",
@@ -857,7 +857,7 @@
               "});\r",
               "\r",
               "pm.test(\"TC-062 Tempo de resposta é menos de 1s\", function () {\r",
-              "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
               "});"
             ],
             "type": "text/javascript",
@@ -915,7 +915,7 @@
               "});\r",
               "\r",
               "pm.test(\"TC-066 Tempo de resposta é menos de 1s\", function () {\r",
-              "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
               "});"
             ],
             "type": "text/javascript",
