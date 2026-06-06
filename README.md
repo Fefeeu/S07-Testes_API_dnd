@@ -53,7 +53,7 @@ execução
 
 ## 🛠️ Funcionalidades e Arquitetura
 
-O ecossistema é composto por 4 containers trabalhando em conjunto:
+O ecossistema é composto por 5 containers trabalhando em conjunto:
 
 | Container    | Papel                                      | Imagem         |
 |--------------|--------------------------------------------|----------------|
@@ -61,6 +61,7 @@ O ecossistema é composto por 4 containers trabalhando em conjunto:
 | test-runner  | Executa os testes Newman da collection     | Docker Hub     |
 | nginx        | Serve o relatório HTML gerado pelo Newman  | Docker Hub     |
 | db           | Persiste o histórico de execuções          | Docker Hub     |
+| mongo-express |  Visualização do mongodb | |
 
 ### Comunicação entre Containers
 
@@ -160,6 +161,8 @@ A IA não substituiu decisões de arquitetura — essas foram tomadas pelo grupo
 
 > Resposta: satisfatória, abordou linha a linha os comandos e a estrutura correta de um arquivo docker_entrypoint.sh e por que ele deve ser criado e utilizado.
 
+[Chat com Claude na parte do Newman](https://claude.ai/share/c8efc3ac-2684-4d0b-bb8c-6dddfac78478)
+
 ### 5. O que não foi feito por IA
 
 - Definição da arquitetura dos 4 containers e seus papéis
@@ -167,3 +170,4 @@ A IA não substituiu decisões de arquitetura — essas foram tomadas pelo grupo
 - Escrita e organização da collection Postman
 - Commits e versionamento do repositório
 - Decisões sobre nomes de variáveis de ambiente e estrutura de pastas
+- Mudanças feitas pós entendimento com a IA
