@@ -125,30 +125,17 @@ def get_info_relatorio(caminho_arquivo):
             file_information, timings_and_data, summary)
 
 if __name__ == "__main__":
-    ARQUIVO_DE_CONTROLE = "ultimo_processado.txt"
-
-    arquivos_html = glob.glob("ultimo_relatorio/*.html")
+    arquivos_html = sorted(glob.glob("newman_reports/*.html"))
 
     if not arquivos_html:
         print("Nenhum relatório encontrado")
     else:
-        caminho_atual = arquivos_html[0]
-        nome_atual = os.path.basename(caminho_atual)
+        caminho_atual = arquivos_html[-1]  # pega o mais recente
+        print(f"Processando relatório: {caminho_atual}")
+        
+        (data, dia_semana, horario, iterations, assertions, failed, skipped, 
+         file_information, timings_and_data, summary) = get_info_relatorio(caminho_atual)
 
-        try:
-            with open(ARQUIVO_DE_CONTROLE, "r") as f:
-                ultimo_processado = f.read().strip()
-        except FileNotFoundError:
-            ultimo_processado = ""
-
-        if nome_atual == ultimo_processado:
-            print(f"Relatório '{nome_atual}' já foi colocado no Banco de Dados.")
-        else:
-            (data, dia_semana, horario, iterations, assertions, failed, skipped, file_information, timings_and_data, summary) = get_info_relatorio(caminho_atual)
-
-            salva_log(data, dia_semana, horario,
-                    iterations, assertions, failed, skipped,
-                    file_information, timings_and_data, summary)
-
-            with open(ARQUIVO_DE_CONTROLE, "w") as f:
-                f.write(nome_atual)
+        salva_log(data, dia_semana, horario,
+                iterations, assertions, failed, skipped,
+                file_information, timings_and_data, summary)
