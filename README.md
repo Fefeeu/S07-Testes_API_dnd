@@ -111,6 +111,8 @@ o uso de ferramentas de IA no desenvolvimento do projeto.
 - **Claude (Anthropic)** — utilizado como principal assistente ao longo do
   desenvolvimento
 
+  Claude foi a escolha mais óbvia pela sua qualidade ao se tratar de problemas de programção, além da excelente feature de criação de pastas de projetos, onde são passadas instruções e dados sobre um projeto e diversos chats podem ser adicionados a este projeto, com todos seguindo as instruções previamente definidas.
+
 ### 2. Escopo de Aplicação
 
 A IA foi utilizada nas seguintes frentes:
@@ -137,8 +139,26 @@ A IA não substituiu decisões de arquitetura — essas foram tomadas pelo grupo
 
 ### 4. Prompts Utilizados (exemplos reais)
 
-> *"Mensagem"*
-> Resposta: 
+### Exemplo 1: Contextualização do Projeto e Primeiros Passos
+
+*Contexto do Projeto:*
+*No projeto anterior, nosso grupo desenvolveu uma coleção de testes no Postman para a API oficial do D&D 5e (anexei o JSON dessa collection oficial na estrutura do projeto que criei utilizando a feature de projetos do claude, com instruções detalhadas de como me orientar a etender a resposta). Agora, para este novo projeto, precisamos seguir estritamente as diretrizes especificadas no documento "Projeto_S07_NP2.pdf", focando no desenvolvimento e na aplicação prática da infraestrutura DevOps. Durante a nossa conversa, vou pedir orientações sobre os conceitos de DevOps que estamos aplicando aqui.*
+
+*Primeiro quero entender o Dockerfile do ambiente de testes (que no nosso caso será a base com o Jenkins). Depois disso, criarei o `Jenkinsfile` com as instruções corretas do pipeline.* 
+
+*Vou te enviar o Dockerfile de exemplo que o professor disponibilizou. Quero entender detalhadamente o que significa cada instrução dele e como eu montaria essa estrutura do zero. Em seguida como devo estruturar o dockerfile do jenkins para nosso projeto*
+
+> Resposta: Satisfatória, abordou linha por linha explicando a sintaxe do dockerfile, o que eu deveria manter para meu projeto e por que de cada utilização dos comandos listados. 
+
+### Exemplo 2: Análise de Plugins e Estrutura do Entrypoint
+
+*Antes de avançarmos para o desenvolvimento do script de e-mail e do `docker_entrypoint.sh`, preciso entender a fundo o ecossistema de plugins do Jenkins e a lógica de inicialização do container. Vou enviar a lista de plugins do projeto de exemplo do professor para avaliarmos o que realmente se aplica ao nosso escopo.*
+
+*Quero entender:*
+* *Quais desses plugins são estritamente necessários para o nosso projeto NP2, quais seriam úteis e o que cada um deles faz na prática.*
+* *O que é o Docker Entrypoint, por que ele é necessário, como ele deve ser estruturado corretamente e qual é o papel do comando `exec "$@"` no final do script.*
+
+> Resposta: satisfatória, abordou linha a linha os comandos e a estrutura correta de um arquivo docker_entrypoint.sh e por que ele deve ser criado e utilizado.
 
 ### 5. O que não foi feito por IA
 
