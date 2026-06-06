@@ -3,7 +3,7 @@ services:
     image: mongo:7
     restart: always
     env_file:
-      - ./data/db/.env
+      - ./pipeline_docker/.env
     ports:
       - "27017:27017"
     volumes:
