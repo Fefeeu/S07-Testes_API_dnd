@@ -33,8 +33,10 @@ pipeline {
                             --reporter-html-export ${REPORTS_DIR}/report_testes.html
                     """
                 }
+                sh "ls -la ${REPORTS_DIR}/"
             }
         }
+
 
         stage('Build & Package') {
             steps {
