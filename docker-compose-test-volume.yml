@@ -1,12 +1,13 @@
 services:
   db:
-    build: ./data/db
+    image: mongo:7
     restart: always
     env_file:
       - ./data/db/.env
     ports:
       - "27017:27017"
     volumes:
+      - ./data/db/init/init.js:/docker-entrypoint-initdb.d/init.js
       - db_data:/data/db
     networks:
       - pipeline
