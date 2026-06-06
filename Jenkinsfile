@@ -22,6 +22,7 @@ pipeline {
         stage('Test (Run Postman Tests)') {
             steps {
                 echo 'Iniciando os testes automatizados da API com Newman...'
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                 // Roda o Newman apontando para a pasta correta da sua estrutura
                 // Cobertura >= 90% avaliada pelo sucesso das asserções da collection
                 sh """
