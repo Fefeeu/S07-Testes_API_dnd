@@ -28,8 +28,8 @@ pipeline {
                 sh """
                     newman run newman/collection_tests.json \
                         -e "newman/Environment dnd5e.postman_environment.json" \
-                        --reporters cli,html \
-                        --reporter-html-export ${REPORTS_DIR}/report_testes.html
+                        --reporters cli,htmlextra \
+                        --reporter-htmlextra-export ${REPORTS_DIR}/report_testes.html
                 """
             }
         }

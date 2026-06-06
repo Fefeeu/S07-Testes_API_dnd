@@ -35,6 +35,8 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg \
 
 RUN npm install -g newman
 
+RUN npm install -g newman newman-reporter-htmlextra
+
 RUN groupadd -f docker && usermod -aG docker jenkins
 
 # necessario criar um entrypoint pra função de notificação quando iniciar
