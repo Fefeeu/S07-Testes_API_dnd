@@ -54,9 +54,8 @@ pipeline {
                 // Executa o script de banco passando as dependências de forma silenciosa
                 // Nota: Idealmente seu Jenkins Agent deve possuir o python instalado via docker_entry.sh
                 sh """
-                    cd data
-                    pip install -r requirements.txt --break-system-packages -q
-                    python3 db_manager.py
+                    pip install -r data/requirements.txt --break-system-packages -q
+                    python3 data/db_manager.py
                 """
             }
         }
