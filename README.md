@@ -7,8 +7,7 @@ integrantes, o que pode ser verificado através do histórico de commits
 significativos no repositório:
 
 - Pedro Henrique Ribeiro Dias
-- Felipe Ferreira de Carvalho
-- Gabriel Pereira
+- Felipe Ferreira de Carvalho Gabriel Pereira
 - Felipe Silva Loschi
 - Guilherme Souza Emergente
 
