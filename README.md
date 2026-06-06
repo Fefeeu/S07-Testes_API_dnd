@@ -122,6 +122,8 @@ A IA foi utilizada nas seguintes frentes:
 - Revisão e correção do Dockerfile do Jenkins
 - Sugestões de boas práticas de versionamento e mensagens de commit
 - Revisão deste README
+- Escrita e revisão de códigos burocráticos tais como casc.yaml
+- Explicação da estrutura de configuração automática do servidor Jenkins
 
 ### 3. Dinâmica de Trabalho
 
