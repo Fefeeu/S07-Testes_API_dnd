@@ -2,11 +2,12 @@ pipeline {
     agent any
 
     environment {
-        // Define a variável de ambiente para o e-mail coletando das credenciais do Jenkins
-        // Isso atende perfeitamente o requisito de "Variável de ambiente para e-mail" sem hardcode
         DESTINATARIO = credentials('email-destinatario')
-        REPORTS_DIR  = 'newman_reports'
-        DIST_DIR     = 'dist'
+        REPORTS_DIR = 'newman_reports'
+        DIST_DIR = 'dist'
+        MONGO_INITDB_ROOT_USERNAME = credentials('mongo-user')
+        MONGO_INITDB_ROOT_PASSWORD = credentials('mongo-pass')
+        MONGO_INITDB_DATABASE      = 'pipeline_logs'
     }
 
     stages {

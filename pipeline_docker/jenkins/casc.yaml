@@ -30,6 +30,18 @@ credentials:
               id: "email-destinatario"
               secret: "${EMAIL_DESTINATARIO}"
               description: "Email destinatário"
+          - string:
+              id: "mongo-user"
+              secret: "${MONGO_INITDB_ROOT_USERNAME}"
+              description: "MongoDB usuário"
+          - string:
+              id: "mongo-pass"
+              secret: "${MONGO_INITDB_ROOT_PASSWORD}"
+              description: "MongoDB senha"
+          - string:
+              id: "mongo-db"
+              secret: "${MONGO_INITDB_DATABASE}"
+              description: "MongoDB database"
 
 jobs:
   - script: >
