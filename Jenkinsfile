@@ -23,17 +23,14 @@ pipeline {
         stage('Test (Run Postman Tests)') {
             steps {
                 echo 'Iniciando os testes automatizados da API com Newman...'
-                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                    // Roda o Newman apontando para a pasta correta da sua estrutura
-                    // Cobertura >= 90% avaliada pelo sucesso das asserções da collection
-                    sh """
-                        newman run newman/collection_tests.json \
-                            -e "newman/Environment dnd5e.postman_environment.json" \
-                            --reporters cli,html \
-                            --reporter-html-export ${REPORTS_DIR}/report_testes.html
-                    """
-                }
-                sh "ls -la ${REPORTS_DIR}/"
+                // Roda o Newman apontando para a pasta correta da sua estrutura
+                // Cobertura >= 90% avaliada pelo sucesso das asserções da collection
+                sh """
+                    newman run newman/collection_tests.json \
+                        -e "newman/Environment dnd5e.postman_environment.json" \
+                        --reporters cli,html \
+                        --reporter-html-export ${REPORTS_DIR}/report_testes.html
+                """
             }
         }
 
